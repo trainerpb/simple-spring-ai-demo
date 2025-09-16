@@ -1,0 +1,29 @@
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<script>
+
+    function initResult() {
+        const userInput = document.getElementById('userInput').value;
+        const chatBox = document.getElementById('chatBox');
+const buffer = [];
+
+       const eventSource = new EventSource("http://localhost:8080/chat/mpt?n="+encodeURIComponent(userInput));
+eventSource.onmessage = (event) => {
+if (event.data === '[DONE]') {
+    eventSource.close();
+    console.log('SSE connection closed.');
+  }
+
+  console.log("Chunk:", event.data);
+ buffer.push(event.data);
+
+  // Optional: flush every few seconds
+  const markdown = buffer.join();
+  chatBox.innerHTML = marked.parse(markdown);
+
+};
+    }
+</script>
+<input type="number" placeholder="No of questions" id="userInput" value="1"/>
+<button id="sendButton" onclick="initResult()">Send</button>
+<div id="chatBox"></div>
