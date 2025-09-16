@@ -1,0 +1,16 @@
+<script>
+
+    function initResult() {
+        const userInput = document.getElementById('userInput').value;
+        const chatBox = document.getElementById('chatBox');
+
+       const eventSource = new EventSource("http://localhost:8080/chat/story?question="+encodeURIComponent(userInput));
+eventSource.onmessage = (event) => {
+  console.log("Chunk:", event.data);
+  chatBox.innerHTML +=' '+ event.data ;
+};
+    }
+</script>
+<textarea id="userInput" placeholder="Type your message here..." rows="20" cols="80" ></textarea>
+<button id="sendButton" onclick="initResult()">Send</button>
+<div id="chatBox"></div>
