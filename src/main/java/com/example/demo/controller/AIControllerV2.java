@@ -3,6 +3,9 @@ package com.example.demo.controller;
 import com.example.demo.model.Student;
 import com.example.demo.service.AIServiceV2;
 import com.example.demo.service.AiService;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
+import org.springframework.ai.image.ImageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
@@ -70,6 +73,20 @@ public class AIControllerV2 {
 
         return emitter;
 
+
+    }
+    // add controller for image generation
+    @GetMapping("/generateImage")
+    public ImageResponse generateImage(@RequestParam String prompt) {
+        return chatServiceV2.generateImage(prompt);
+    }
+//    @GetMapping(value = "/doc", produces = "text/markdown")
+    @GetMapping(value = "/doc", produces = MediaType.TEXT_HTML_VALUE)
+    public String getMarkdownDoc() {
+        String markdown = "# Hello\nThis is a **Markdown** response.";
+        Parser parser = Parser.builder().build();
+        HtmlRenderer renderer = HtmlRenderer.builder().build();
+        return renderer.render(parser.parse(markdown));
 
     }
 
