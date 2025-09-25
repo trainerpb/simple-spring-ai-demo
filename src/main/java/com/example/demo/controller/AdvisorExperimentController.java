@@ -22,5 +22,9 @@ public class AdvisorExperimentController {
         return advisorExperimentService.simpleChat(question,lang);
     }
 
+    @GetMapping("/ask-api")
+    public  String askBlocking(@RequestParam("q")String question){
+        return advisorExperimentService.simpleChat_Blocking(question);
+    }
 
 }
